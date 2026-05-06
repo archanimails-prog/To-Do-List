@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-md-4 mx-auto">
+    <h3>Forgot Password</h3>
+    <form method="POST">
+        <input type="email" name="email" class="form-control mb-3" placeholder="Enter your email" required>
+        <button class="btn btn-primary w-100">Send OTP</button>
+    </form>
+</div>
+{% endblock %}

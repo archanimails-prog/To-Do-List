@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3 class="mb-4 fw-bold">Your Tasks</h3>
+
+<!-- 🔍 SEARCH + FILTER -->
+<div class="card p-3 mb-3">
+    <form method="GET" class="row g-2">
+
+        <div class="col-md-4">
+            <input type="text" name="search" placeholder="Search task..."
+                   class="form-control"
+                   value="{{ request.args.get('search','') }}">
+        </div>
+
+        <div class="col-md-3">
+            <select name="status" class="form-control">
+                <option value="">All Status</option>
+                <option value="Yet to start">Yet to start</option>
+                <option value="In progress">In progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Missed">Missed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="priority" class="form-control">
+                <option value="">All Priority</option>
+                <option value="High">🔴 High</option>
+                <option value="Medium">🟡 Medium</option>
+                <option value="Low">🟢 Low</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">
+                <i class="bi bi-search"></i> Apply
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- FLASH -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="flash-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+      {% for category, message in messages %}
+        <div class="alert alert-success shadow mb-2">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+
+    <script>
+      setTimeout(() => {
+        let f = document.getElementById("flash-container");
+        if(f){ f.remove(); }
+      }, 3000);
+    </script>
+  {% endif %}
+{% endwith %}
+
+{% if tasks %}
+
+<div class="card p-3">
+
+<table class="table table-hover text-center align-middle">
+
+<tr class="table-dark">
+    <th>Topic</th>
+    <th>Task</th>
+    <th>Category</th>
+    <th>Priority</th>
+    <th>Start</th>
+    <th>End</th>
+    <th>Status</th>
+    <th>Update</th>
+</tr>
+
+{% for t in tasks %}
+<tr class="{% if t.status!='Completed' and t.end < now %}table-danger{% endif %}">
+
+<td>{{ t.topic }}</td>
+<td>{{ t.title }}</td>
+
+<td>
+    {% if t.category == 'Study' %}
+        <span class="badge bg-primary">📘 Study</span>
+    {% elif t.category == 'Personal' %}
+        <span class="badge bg-info text-dark">🏠 Personal</span>
+    {% elif t.category == 'Work' %}
+        <span class="badge bg-dark">💼 Work</span>
+    {% else %}
+        <span class="badge bg-secondary">N/A</span>
+    {% endif %}
+</td>
+
+<td>
+    {% if t.priority == 'High' %}
+        <span class="badge bg-danger">🔴 High</span>
+    {% elif t.priority == 'Medium' %}
+        <span class="badge bg-warning text-dark">🟡 Medium</span>
+    {% elif t.priority == 'Low' %}
+        <span class="badge bg-success">🟢 Low</span>
+    {% else %}
+        <span class="badge bg-secondary">N/A</span>
+    {% endif %}
+</td>
+
+<td>{{ t.start }}</td>
+<td>{{ t.end }}</td>
+
+<td>
+    {% if t.status == 'Completed' %}
+        <span class="badge bg-success">✔ Completed</span>
+    {% elif t.status == 'In progress' %}
+        <span class="badge bg-warning text-dark">⏳ In Progress</span>
+    {% elif t.status == 'Yet to start' %}
+        <span class="badge bg-secondary">🕒 Yet to Start</span>
+    {% elif t.status == 'Missed' %}
+        <span class="badge bg-danger">❌ Missed</span>
+    {% elif t.status == 'Cancelled' %}
+        <span class="badge bg-dark">🚫 Cancelled</span>
+    {% endif %}
+</td>
+
+<td>
+<form method="POST" action="/update_status/{{t.id}}">
+<select name="status" class="form-select form-select-sm">
+
+<option value="Yet to start" {% if t.status=='Yet to start' %}selected{% endif %}>Yet to start</option>
+<option value="In progress" {% if t.status=='In progress' %}selected{% endif %}>In progress</option>
+<option value="Cancelled" {% if t.status=='Cancelled' %}selected{% endif %}>Cancelled</option>
+<option value="Completed">Completed</option>
+<option value="Missed">Missed</option>
+
+</select>
+
+<button class="btn btn-primary btn-sm mt-2 w-100">
+    <i class="bi bi-arrow-repeat"></i> Update
+</button>
+</form>
+</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+{% else %}
+
+<div class="text-center mt-5">
+    <h4>No tasks yet 😴</h4>
+    <p>Create your first task to get started</p>
+    <a href="/add_task" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Add Task
+    </a>
+</div>
+
+{% endif %}
+
+{% endblock %}

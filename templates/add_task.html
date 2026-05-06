@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card p-4">
+    <h3 class="mb-3">Add Task</h3>
+
+    <form method="POST" class="row g-3">
+
+        <!-- Topic -->
+        <div class="col-md-6">
+            <input name="topic" placeholder="Topic" class="form-control" required>
+        </div>
+
+        <!-- Title -->
+        <div class="col-md-6">
+            <input name="title" placeholder="Task" class="form-control" required>
+        </div>
+
+        <!-- Start Time -->
+        <div class="col-md-6">
+            <label class="form-label">Start Time</label>
+            <input type="datetime-local" name="start" class="form-control" required>
+        </div>
+
+        <!-- End Time -->
+        <div class="col-md-6">
+            <label class="form-label">End Time</label>
+            <input type="datetime-local" name="end" class="form-control" required>
+        </div>
+
+        <!-- Category -->
+        <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-control" required>
+                <option value="">Select Category</option>
+                <option>Study</option>
+                <option>Personal</option>
+                <option>Work</option>
+            </select>
+        </div>
+
+        <!-- Priority -->
+        <div class="col-md-6">
+            <label class="form-label">Priority</label>
+            <select name="priority" class="form-control" required>
+                <option value="">Select Priority</option>
+                <option value="High">🔴 High</option>
+                <option value="Medium">🟡 Medium</option>
+                <option value="Low">🟢 Low</option>
+            </select>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-12">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-control">
+                <option>Yet to start</option>
+                <option>In progress</option>
+                <option>Cancelled</option>
+                <option>Completed</option>
+                <option>Missed</option>
+            </select>
+        </div>
+
+        <!-- Submit -->
+        <div class="col-12">
+            <button class="btn btn-primary mt-2 w-100">Add Task</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

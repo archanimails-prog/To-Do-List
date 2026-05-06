@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-md-4 mx-auto">
+    <h3>Reset Password</h3>
+
+    <form method="POST">
+        <input type="password" name="password" class="form-control mb-2" placeholder="New Password" required>
+        <input type="password" name="confirm_password" class="form-control mb-3" placeholder="Confirm Password" required>
+
+        <button class="btn btn-danger w-100">Reset Password</button>
+    </form>
+</div>
+{% endblock %}
